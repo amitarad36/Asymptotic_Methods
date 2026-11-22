@@ -1,0 +1,305 @@
+% Compile with: pdflatex homework_solutions.tex (twice for the contents).
+% Append later assignments before \end{document}; a template is at the end.
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\allowdisplaybreaks
+
+\newcounter{question}[section]
+\newcommand{\homework}[1]{%
+  \clearpage
+  \section{Homework #1}%
+  \setcounter{question}{0}%
+  \setcounter{equation}{0}%
+}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\newenvironment{question}{%
+  \refstepcounter{question}%
+  \subsection*{Question \arabic{question}}%
+  \addcontentsline{toc}{subsection}{Question \arabic{question}}%
+}{\par}
+\newenvironment{answer}{\par\medskip\textbf{Answer.}\par}{\par\medskip}
+\newcommand{\eps}{\varepsilon}
+\DeclareMathOperator{\erf}{erf}
+\DeclareMathOperator{\erfc}{erfc}
+
+\title{Asymptotic Methods\\Homework Questions and Solutions}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\homework{1}
+\textit{Source: \texttt{homework1.pdf}, Exercise examples \#1,
+Fall 2026--2027. All three numbered problems are included.
+In Question 3, the source mixes $x$ and $z$ in the notation for the
+error function; the variable is written consistently as $z$ below.}
+
+\begin{question}
+Show that
+\[
+  f\sim g \quad\Longleftrightarrow\quad f=g[1+o(1)].
+\]
+\end{question}
+
+\begin{answer}
+Fix a limiting process, for example $x\to a$ or $x\to\infty$.
+Assume that $g(x)\ne0$ throughout a sufficiently small punctured
+neighborhood of the limit (or for all sufficiently large $x$).
+Both statements must refer to this same limiting process.
+
+By definition, asymptotic equivalence means
+\[
+  f(x)\sim g(x)
+  \quad\Longleftrightarrow\quad
+  \lim_{x\to a}\frac{f(x)}{g(x)}=1.
+\]
+The notation $r(x)=o(1)$ means $r(x)\to0$.
+
+\textbf{Forward implication.}
+Suppose $f\sim g$ and define
+\[
+  r(x)=\frac{f(x)}{g(x)}-1.
+\]
+Then $r(x)\to0$, so $r=o(1)$, and rearranging gives
+\[
+  f(x)=g(x)\bigl[1+r(x)\bigr]=g(x)[1+o(1)].
+\]
+
+\textbf{Reverse implication.}
+Suppose $f(x)=g(x)[1+r(x)]$ for some $r(x)\to0$.
+Division by $g(x)$ gives
+\[
+  \frac{f(x)}{g(x)}=1+r(x)\longrightarrow1.
+\]
+Thus $f\sim g$, proving the equivalence.
+
+An equivalent formulation is $f-g=o(g)$, meaning that
+$(f-g)/g\to0$. The error is small \emph{relative to $g$};
+the absolute difference need not tend to zero.
+For example, $x+\sqrt{x}\sim x$ as $x\to\infty$, even though
+their difference tends to infinity.
+\end{answer}
+
+\begin{question}
+Obtain two-term approximations for the two large roots of
+\[
+  \eps^{1/2}z^3+(1+\eps)z+\eps^{1/3}=0.
+\]
+\end{question}
+
+\begin{answer}
+We take $\eps\to0^+$ and allow complex roots.
+The two large roots are a complex-conjugate pair.
+
+\textbf{1. Find the scale by dominant balance.}
+For a large root, balance the cubic and linear terms:
+\[
+  \eps^{1/2}z^3\sim-z,
+  \qquad z^2\sim-\eps^{-1/2}.
+\]
+Consequently, $z=O(\eps^{-1/4})$ and the leading approximations are
+$z\sim\pm i\eps^{-1/4}$.
+The constant term is small on this scale.
+
+Set $z=\eps^{-1/4}w$ and multiply the equation by $\eps^{1/4}$:
+\begin{equation}\label{eq:scaled}
+  w^3+(1+\eps)w+\eps^{7/12}=0.
+\end{equation}
+At $\eps=0$, the limiting equation is $w(w^2+1)=0$.
+The roots $w_0=\pm i$ give the two large roots of the original
+equation. The root $w_0=0$ belongs to a different scale.
+
+\textbf{2. Determine the first correction.}
+Write $w=w_0+\delta$, with $w_0=\pm i$ and $\delta=o(1)$.
+Using $w_0^3+w_0=0$ and $3w_0^2+1=-2$ in
+\eqref{eq:scaled}, we obtain
+\[
+  -2\delta+3w_0\delta^2+\delta^3
+  +\eps w_0+\eps\delta+\eps^{7/12}=0.
+\]
+Since $\eps=o(\eps^{7/12})$, the largest forcing is
+$\eps^{7/12}$. Balancing it with $-2\delta$ gives
+\[
+  \delta\sim\frac12\eps^{7/12}.
+\]
+More precisely, substitution shows that
+\[
+  w_\pm=\pm i+\frac12\eps^{7/12}+O(\eps).
+\]
+The validity of this local expansion can also be seen by putting
+$t=\eps^{1/12}$ in \eqref{eq:scaled}. The resulting equation,
+$w^3+(1+t^{12})w+t^7=0$, is analytic in $(w,t)$, and its derivative
+with respect to $w$ is $-2$ at $(\pm i,0)$. The implicit function
+theorem therefore gives a regular local expansion in $t$.
+
+\textbf{3. Return to the original variable.}
+Multiplying by $\eps^{-1/4}$ yields the requested two-term answers:
+\begin{equation}
+  \boxed{z_\pm(\eps)=\pm i\eps^{-1/4}
+       +\frac12\eps^{1/3}+O(\eps^{3/4}).}
+\end{equation}
+The correction is smaller than the leading term by a factor
+$\eps^{7/12}\to0$.
+
+As an additional check, retaining the next forcing $\eps w_0$
+gives
+\[
+  z_\pm=\pm i\eps^{-1/4}+\frac12\eps^{1/3}
+       \pm\frac{i}{2}\eps^{3/4}+O(\eps^{11/12}).
+\]
+The remaining, small root has leading behavior
+$z_{\mathrm{small}}\sim-\eps^{1/3}$, obtained by balancing the
+linear and constant terms. This also explains why there are
+exactly two large roots and one small root.
+\end{answer}
+
+\begin{question}
+Obtain an asymptotic series for
+\[
+  \erf z=\frac{2}{\sqrt{\pi}}\int_0^z e^{-t^2}\,dt
+  \qquad\text{as }z\to\infty.
+\]
+Hint: recall that $\erf(\infty)=1$.
+Does the series converge? How many terms are needed to obtain
+an accuracy of $10^{-5}$ for $z=3$?
+\end{question}
+
+\begin{answer}
+We consider real $z\to+\infty$ and interpret the requested
+accuracy as an absolute error in $\erf(3)$.
+
+\textbf{1. Expand the tail integral.}
+Using the hint, define the complementary error function:
+\[
+  \erfc z=1-\erf z
+  =\frac{2}{\sqrt{\pi}}\int_z^\infty e^{-t^2}\,dt.
+\]
+For $n\ge0$, put
+\[
+  I_n(z)=\int_z^\infty t^{-2n}e^{-t^2}\,dt.
+\]
+Since $d(e^{-t^2})=-2t e^{-t^2}\,dt$, integration by parts gives
+\begin{align*}
+  I_n(z)
+  &=-\frac12\int_z^\infty t^{-(2n+1)}\,d(e^{-t^2})\\
+  &=\frac{e^{-z^2}}{2z^{2n+1}}
+     -\frac{2n+1}{2}I_{n+1}(z).
+\end{align*}
+The boundary term at infinity vanishes because exponential decay
+dominates every fixed power.
+
+Repeated use of this identity gives
+\begin{equation}\label{eq:erfc-expansion}
+  \erfc z=
+  \frac{e^{-z^2}}{\sqrt{\pi}\,z}
+  \sum_{n=0}^{N-1}(-1)^n\frac{(2n-1)!!}{(2z^2)^n}
+  +R_N(z),
+\end{equation}
+where $(-1)!!=1$ and
+\[
+  R_N(z)=(-1)^N\frac{2}{\sqrt{\pi}}
+         \frac{(2N-1)!!}{2^N}I_N(z).
+\]
+In particular, the asymptotic expansion is
+\begin{equation}
+  \boxed{\erf z\sim1-
+  \frac{e^{-z^2}}{\sqrt{\pi}\,z}
+  \left(1-\frac{1}{2z^2}+\frac{3}{4z^4}
+        -\frac{15}{8z^6}+\frac{105}{16z^8}-\cdots\right).}
+\end{equation}
+
+\textbf{2. Bound the remainder and justify the expansion.}
+For $z>0$, the recurrence and $I_{N+1}(z)>0$ imply
+\[
+  0<I_N(z)<\frac{e^{-z^2}}{2z^{2N+1}}.
+\]
+Thus
+\begin{equation}\label{eq:remainder-bound}
+  |R_N(z)|<\frac{e^{-z^2}}{\sqrt{\pi}\,z}
+            \frac{(2N-1)!!}{(2z^2)^N}.
+\end{equation}
+The error is smaller than the magnitude of the first omitted
+term and has that term's sign in the expansion for $\erfc z$.
+For each fixed $N$, this bound is of smaller order than the last
+retained term as $z\to+\infty$. This proves the asymptotic property.
+
+\textbf{3. Does the infinite series converge?}
+Let $a_n=(2n-1)!!/(2z^2)^n$ be the magnitude of the $n$th term
+inside the parentheses. For any fixed finite $z>0$,
+\[
+  \frac{a_{n+1}}{a_n}=\frac{2n+1}{2z^2}\longrightarrow\infty.
+\]
+The terms eventually grow and fail to tend to zero. Therefore the
+series diverges for every fixed finite $z>0$.
+There is no contradiction: an asymptotic expansion describes the
+error after a fixed number of terms as $z\to\infty$, whereas
+convergence would require a limit as $N\to\infty$ with $z$ fixed.
+In practice, the series should be truncated near its smallest term
+if especially high accuracy is wanted.
+
+\textbf{4. Number of terms for $z=3$.}
+Retaining just the first term of the tail expansion gives
+\[
+  \erf(3)\approx1-\frac{e^{-9}}{3\sqrt{\pi}}
+              \approx0.999976791158.
+\]
+For $N=1$, \eqref{eq:remainder-bound} gives the rigorous bound
+\[
+  |\text{error}|<\frac{e^{-9}}{3\sqrt{\pi}}\frac1{18}
+               \approx1.28938\times10^{-6}<10^{-5}.
+\]
+Hence \emph{one term of the tail series} is sufficient, in addition
+to the leading constant $1$ in $\erf z$.
+
+To check that the constant $1$ alone is insufficient, use
+$I_0=e^{-z^2}/(2z)-I_1/2$ and
+$I_1<I_0/z^2$ to obtain
+\[
+  \erfc z>
+  \frac{e^{-z^2}}{\sqrt{\pi}\,z}
+  \frac{1}{1+1/(2z^2)}.
+\]
+At $z=3$, this lower bound is approximately
+$2.19873\times10^{-5}>10^{-5}$.
+Thus the minimal answer is
+\[
+  \boxed{\begin{gathered}
+    \text{One tail term (two contributions including the constant):}\\
+    \erf(3)\approx1-\frac{e^{-9}}{3\sqrt{\pi}}.
+  \end{gathered}}
+\]
+\end{answer}
+
+% =====================================================================
+% FUTURE ASSIGNMENTS
+% Uncomment and repeat this block for each new homework assignment.
+% Each \homework command starts a new page and resets question numbering.
+% Equations are numbered by assignment section.
+%
+% \homework{2}
+% \begin{question}
+% Paste the next question here.
+% \end{question}
+% \begin{answer}
+% Write the detailed solution here.
+% \end{answer}
+%
+% \begin{question}
+% Paste another question here.
+% \end{question}
+% \begin{answer}
+% Write its detailed solution here.
+% \end{answer}
+% =====================================================================
+
+\end{document}

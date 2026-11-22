@@ -1,0 +1,40 @@
+# LaTeX build intermediates (keep the compiled PDFs)
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.nav
+*.snm
+*.vrb
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.xdv
+*.dvi
+
+# Generated page images and temporary working files
+/guy_assessment_preview/
+/guy_notes_preview/
+/.codex_tmp/
+/.tmp/
+*.tmp
+*.bak
+*~
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+/.aws/
+
+# Operating-system metadata
+Thumbs.db
+Desktop.ini
+.DS_Store

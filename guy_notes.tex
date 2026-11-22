@@ -1,0 +1,942 @@
+% Compile: pdflatex guy_notes.tex (twice for the contents).
+% Source: notes from guy 18_11_26.pdf, all 21 pages.
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\allowdisplaybreaks
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\OO}{\mathcal O}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\Null}{Null}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\spanof}{span}
+\newcommand{\src}[1]{\par\smallskip{\small\color{gray}Source PDF: page(s) #1.}\par}
+\newcommand{\edit}[2]{\par\begingroup\small\color{blue!55!black}\textbf{#1.} #2\par\endgroup}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{example}[definition]{Example}
+\numberwithin{equation}{section}
+\title{Asymptotic Methods\\\large Guy's Handwritten Notes: Edited LaTeX Transcription}
+\author{Source notes by Guy}
+\date{Source file dated 18 November 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+An edited mathematical transcription of all 21 pages of
+\texttt{notes from guy 18\_11\_26.pdf}. The order of topics and worked
+examples follows the source. English and layout have been cleaned up;
+repeated algebra has occasionally been combined. Blue editorial notes
+identify substantive corrections, deductions, added hypotheses, and
+unresolved notation. Source-page markers support comparison with the original.
+This is an edited study edition, not a diplomatic, symbol-for-symbol copy.
+\end{abstract}
+\tableofcontents
+\section*{Reading this edition}
+\addcontentsline{toc}{section}{Reading this edition}
+The source's $\ord(g)$ notation means two-sided comparability in absolute
+value (often written $\Theta(g)$); it does not mean asymptotic equivalence.
+The symbol $\ll$ means little-$o$ when used in asymptotic comparisons.
+Unless stated otherwise, $\eps\to0^+$ and large real parameters tend to
+$+\infty$. Corrections are displayed in the main mathematics and explained
+locally. Additional reasoning is labelled \emph{Reconstruction} or
+\emph{Clarification}. An editorial register appears at the end.
+
+\section{Euler's constant}
+\src{1--2}
+Define
+\begin{equation}
+ H_n=\sum_{j=1}^n\frac1j,\qquad a_n=H_n-\ln n.
+\end{equation}
+We claim that $a_n$ converges to Euler's constant $\gamma$.
+\subsection{Existence of the limit}
+For $j<t<j+1$,
+\[
+ \frac1{j+1}<\frac1t<\frac1j.
+\]
+Integrating on $[j,j+1]$ and summing gives, for $n>1$,
+\[
+ H_n-1<\ln n<H_{n-1},\qquad \frac1n<a_n<1.
+\]
+Furthermore,
+\begin{align}
+ a_{n+1}-a_n
+ &=\frac1{n+1}-\ln(n+1)+\ln n\\
+ &=\frac1{n+1}+\ln\left(1-\frac1{n+1}\right)<0.
+\end{align}
+Indeed $h(x)=\ln(1-x)+x$ satisfies $h(0)=0$ and
+$h'(x)=-x/(1-x)<0$ for $0<x<1$.
+Thus $(a_n)$ is decreasing and bounded below, so
+\[
+ \gamma=\lim_{n\to\infty}(H_n-\ln n)=0.57721\ldots.
+\]
+\edit{Correction (p.~1)}{The logarithmic inequality uses
+$\ln(1-x)+x$, as confirmed by the derivative in the notes. The handwritten
+claim appears to have a minus sign. Strict bounds above require $n>1$;
+$a_1=1$.}
+
+\subsection{Integral representations}
+The geometric-sum identity yields
+\[
+ \sum_{j=1}^n q^j=\frac{q(1-q^n)}{1-q}.
+\]
+Since $1/j=\int_0^\infty e^{-jt}\,dt$,
+\begin{equation}
+ H_n=\int_0^\infty
+ \frac{e^{-t}(1-e^{-nt})}{1-e^{-t}}\,dt.
+\end{equation}
+For fixed $n$, this integrand tends to $n$ as $t\to0^+$.
+If $n\to\infty$ is taken first, the resulting integrand is
+$e^{-t}/(1-e^{-t})\sim1/t$, which is not integrable at zero.
+Similarly, interchanging nonnegative integrals,
+\begin{align}
+ \ln n&=\int_1^n\frac{dx}{x}
+ =\int_1^n\int_0^\infty e^{-xt}\,dt\,dx\\
+ &=\int_0^\infty\frac{e^{-t}-e^{-nt}}t\,dt.
+\end{align}
+Subtracting the representations before passing to the limit gives
+\begin{equation}\label{eq:gammaint}
+ \gamma=\int_0^\infty e^{-t}
+ \left(\frac1{1-e^{-t}}-\frac1t\right)\,dt.
+\end{equation}
+The cancellation near zero follows from
+\[
+ 1-e^{-t}=t-\frac{t^2}2+\OO(t^3),\qquad
+ \frac1{1-e^{-t}}=\frac1t+\frac12+\OO(t).
+\]
+\edit{Correction and reconstruction (p.~2)}{The first-order Taylor signs
+are corrected: $1-e^{-nt}=nt+\OO(t^2)$ for fixed $n$, and
+$e^{-t}=1-t+\OO(t^2)$. The omitted justification of
+\eqref{eq:gammaint} can be supplied as follows. The difference between
+$a_n$ and the displayed limiting integral is
+$\int_0^\infty e^{-nt}r(t)\,dt$, where
+$r(t)=1/t-1/(e^t-1)$ is positive, continuous at zero with value $1/2$,
+and bounded. Hence this difference is $\OO(1/n)$.}
+
+\section{The Gamma function}
+\src{2--4}
+For $x>0$, define
+\begin{equation}
+ \Gamma(x)=\int_0^\infty e^{-t}t^{x-1}\,dt.
+\end{equation}
+In particular $\Gamma(1)=1$. Integration by parts gives
+\[
+ \Gamma(x+1)=[-e^{-t}t^x]_0^\infty
+ +x\int_0^\infty e^{-t}t^{x-1}\,dt=x\Gamma(x).
+\]
+Consequently $\Gamma(n+1)=n!$ for integers $n\ge0$.
+With $t=u^2$,
+\[
+ \Gamma\left(\tfrac12\right)
+ =2\int_0^\infty e^{-u^2}\,du=\sqrt\pi.
+\]
+\edit{Clarification (p.~3)}{The informal expression $(-1/2)!$ means
+$\Gamma(1/2)$; the substitution requires the factor $2$ above.}
+For complex $z$ with $\Re z>0$,
+\[
+ \Gamma(z)=\int_0^\infty e^{-t}t^{z-1}\,dt,\qquad
+ \Gamma(z+1)=z\Gamma(z).
+\]
+The recurrence continues $\Gamma$ meromorphically to the complex plane,
+with poles at $0,-1,-2,\ldots$.
+\edit{Clarification (p.~3)}{Continuation by $\Gamma(z)=\Gamma(z+1)/z$
+does not assign finite values at the poles.}
+
+\subsection{A binomial series}
+For $p>0$, let $f(x)=(1+x)^{-p}$. Then
+\[
+ f^{(n)}(0)=(-1)^n p(p+1)\cdots(p+n-1)
+ =(-1)^n\frac{\Gamma(p+n)}{\Gamma(p)}.
+\]
+Thus
+\begin{equation}
+ (1+x)^{-p}=\sum_{n=0}^\infty
+ \frac{(-1)^n\Gamma(p+n)}{n!\Gamma(p)}x^n,\qquad |x|<1.
+\end{equation}
+\edit{Clarification (pp.~3--4)}{The convergence domain $|x|<1$ is added;
+the zeroth derivative uses an empty product equal to $1$.}
+
+\section{Order notation and asymptotic expansions}
+\subsection{Order notation}
+\src{4--5}
+As $x\to0$, define:
+\begin{align*}
+ f=\OO(g)&\quad\Longleftrightarrow\quad
+ \exists C,\delta>0:\ |f(x)|\le C|g(x)|\quad(0<|x|<\delta),\\
+ f=o(g)&\quad\Longleftrightarrow\quad
+ \forall C>0\ \exists\delta>0:\ |f(x)|\le C|g(x)|
+ \quad(0<|x|<\delta),\\
+ f=\ord(g)&\quad\Longleftrightarrow\quad
+ \exists c,C,\delta>0:\ c|g(x)|\le|f(x)|\le C|g(x)|
+ \quad(0<|x|<\delta).
+\end{align*}
+The function $g$ is called a \emph{gauge function}. If $g$ is nonzero
+in a punctured neighbourhood, the definitions are equivalent to:
+$f/g$ bounded, $f/g\to0$, and $|f/g|$ bounded above and away from zero,
+respectively. Definitions at infinity are analogous.
+
+Examples include
+\begin{align*}
+ \sin x&=x+\OO(x^3)=x+o(x)=x+\ord(x^3) &&(x\to0),\\
+ x^2\ln x+x^3&=\begin{cases}\OO(x^3),&x\to\infty,\\
+ \OO(x^2\ln x),&x\to0^+,\end{cases}\\
+ x^2-1&=\ord(x-1)&&(x\to0),\\
+ x^{-2}&=o(x^{-1})&&(x\to\infty),\\
+ \sinh x&=\begin{cases}\OO(e^x),&x\to\infty,\\
+ \OO(e^{-x}),&x\to-\infty.\end{cases}
+\end{align*}
+\edit{Clarification (p.~5)}{The somewhat unusual $x^2-1$ example is
+retained with the source's limit $x\to0$; it is valid there, and also
+as $x\to1$. The logarithmic limit is one-sided for real logarithms.}
+For fixed $k>0$ and $\eta>0$,
+\[
+ (\ln x)^k\ll x^\eta,\qquad x^k\ll(1+\eta)^x,
+ \qquad k^x\ll x^{\eta x}\qquad(x\to\infty).
+\]
+Although one writes $f=\OO(g)$, the notation describes membership
+in a class of functions. It does not behave as ordinary equality.
+For example, with
+\[
+ f(n)=\begin{cases}1,&n\text{ odd},\\n^2,&n\text{ even},\end{cases}
+ \qquad g(n)=n^2,
+\]
+we have $f=\OO(g)$, but neither $f=o(g)$ nor $f=\ord(g)$.
+
+\subsection{Arithmetic and common pitfalls}
+\src{5--6}
+For suitable functions near the stated limit,
+\begin{align*}
+ \OO(g)+o(g)&=\OO(g),\\
+ \OO(g_1)+\OO(g_2)&\subseteq\OO(|g_1|+|g_2|),\\
+ \OO(f)\,o(g)&\subseteq o(fg).
+\end{align*}
+Here class identities are understood as usual asymptotic shorthand.
+For example, as $x\to0$,
+\[
+ [x+\OO(x^3)]^2=x^2+\OO(x^4)+\OO(x^6)=x^2+\OO(x^4),
+ \qquad (2+\sin x)o(x^2)=o(x^2).
+\]
+Also $\OO(x^2)+o(x)+\OO(x)$ is $\OO(x^2)$ at infinity and
+$\OO(x)$ at zero.
+
+Order relations cannot in general be exponentiated:
+$2x=\ord(x)$ as $x\to\infty$, whereas
+$e^{2x}\ne\ord(e^x)$. Nor can they be differentiated without further
+assumptions. For instance $x\sin x=\OO(x)$, but
+$x\cos x+\sin x$ is not $\OO(1)$ at infinity.
+Finally two functions of order $g$ may cancel, so their sum need not
+be of order $g$.
+\edit{Correction (p.~6)}{The source writes $x\sin x=\ord(x)$;
+this fails because $\sin x$ has infinitely many zeros. The intended
+warning about differentiation is valid with $\OO(x)$.}
+
+\subsection{Asymptotic equivalence and scales}
+\src{6--7}
+\begin{definition}
+We write $f\sim g$ at a specified limit if $g$ is eventually nonzero
+and $f/g\to1$.
+\end{definition}
+Then $f-g=o(g)$ and $f=\ord(g)$. The notation $f\sim0$ has no
+meaning in this ratio definition.
+For example, as $x\to\infty$,
+\[
+ 7x^{5/2}+18x^2(\ln x)^3+84\sim7x^{5/2}.
+\]
+Stirling's formula is
+\[
+ n!\sim\sqrt{2\pi n}\left(\frac ne\right)^n.
+\]
+\begin{definition}
+A sequence $(\delta_n)$ is an asymptotic scale at a specified limit if
+$\delta_{n+1}=o(\delta_n)$ for every $n$.
+\end{definition}
+Examples are $x^n$ as $x\to0$; $x^{-a_n}$ as $x\to\infty$ when
+$a_{n+1}>a_n$; and $e^{Ax}x^\beta x^{\gamma n}$ as
+$x\to\infty$ when $\gamma<0$. Another scale at $0^+$ is
+\[
+ 1,\ x,\ x^2\ln x,\ x^2,\ x^3(\ln x)^2,\ x^3\ln x,\ x^3,
+ \ x^4(\ln x)^3,\ldots.
+\]
+
+\subsection{Asymptotic series and finite expansions}
+\src{7--8}
+\begin{definition}
+For an asymptotic scale $(\delta_n)$, we write
+\[
+ f(x)\sim\sum_{n=1}^\infty a_n\delta_n(x)
+\]
+if for every fixed $N\ge1$,
+\begin{equation}\label{eq:asymdef}
+ f(x)-\sum_{n=1}^N a_n\delta_n(x)=o(\delta_N(x)).
+\end{equation}
+A finite expansion through $N$ requires this condition for
+$1\le m\le N$, with $m$ in place of $N$.
+\end{definition}
+The coefficients are unique for the specified scale:
+\[
+ a_n=\lim\frac{f(x)-\sum_{k=1}^{n-1}a_k\delta_k(x)}{\delta_n(x)}.
+\]
+The empty sum for $n=1$ is zero. An asymptotic series need not
+converge, and it need not uniquely determine the function. As $x\to0^+$,
+\[
+ e^{-1/x}\sim\sum_{n=0}^\infty0\,x^n,
+ \qquad e^x+e^{-1/x}\sim\sum_{n=0}^\infty\frac{x^n}{n!}.
+\]
+\edit{Correction (p.~7)}{The source calls a remainder
+$\OO(\delta_{N+1})$ an alternative to \eqref{eq:asymdef}.
+For an arbitrary finite expansion this is stronger, not equivalent.
+For an infinite expansion satisfying the definition at \emph{every}
+order, the next-order condition does imply it. The flat-function
+example requires $x\to0^+$.}
+
+A function may have expansions in different scales. For example,
+\begin{align*}
+ \tan x&=x+\frac{x^3}3+\frac{2x^5}{15}+\OO(x^7),\\
+ &=\sin x+\frac12\sin^3x+\frac38\sin^5x+\OO(\sin^7x)
+ \qquad(x\to0).
+\end{align*}
+Expansions may be added, subtracted, multiplied and (with a suitable
+nonvanishing leading denominator) divided, retaining the appropriate
+remainder orders and, if needed, enlarging the scale.
+
+Substitution requires care. Let $f(x)=e^{x^2}$ and
+$x(\eps)=\eps^{-1}+\eps$. Although $x(\eps)\sim\eps^{-1}$,
+\[
+ f(x(\eps))=e^{\eps^{-2}+2+\eps^2}\sim e^2e^{\eps^{-2}},
+ \qquad f(\eps^{-1})=e^{\eps^{-2}}.
+\]
+
+\subsection{A fractional-power example}
+\src{8}
+Find two terms of
+\[
+ F(\eps)=\frac{[\ln(1+\eps)]^{1/4}}{\cosh(\eps^{1/3})},
+ \qquad\eps\to0^+.
+\]
+Using
+\begin{align*}
+ \ln(1+\eps)&=\eps-\frac{\eps^2}2+\OO(\eps^3),\\
+ (1+z)^\alpha&=1+\alpha z+\OO(z^2),\\
+ \cosh z&=1+\frac{z^2}2+\OO(z^4),
+\end{align*}
+we obtain
+\begin{align*}
+ [\ln(1+\eps)]^{1/4}
+ &=\eps^{1/4}\left(1-\frac\eps8+\OO(\eps^2)\right),\\
+ \frac1{\cosh(\eps^{1/3})}
+ &=1-\frac12\eps^{2/3}+\OO(\eps^{4/3}),\\
+ F(\eps)&=\eps^{1/4}-\frac12\eps^{11/12}
+ +\OO(\eps^{5/4}).
+\end{align*}
+\edit{Correction (p.~8)}{The generic binomial expansion has remainder
+$\OO(z^2)$, not $\OO(z^3)$ after just two terms. The final remainder
+is $\OO(\eps^{5/4})$; the handwritten exponent appears to be $5/24$.
+The omitted third term is $-\eps^{5/4}/8$.}
+
+\section{Perturbation of algebraic equations}
+\src{9--10}
+\subsection{Two regular roots}
+Consider
+\[
+ (1-\eps)x^2+2x+\eps=0.
+\]
+At $\eps=0$ the roots are $0,-2$. For the root near zero,
+\[
+ x=-\frac\eps2-\frac12(1-\eps)x^2
+ =-\frac\eps2+\OO(\eps^2).
+\]
+For the second root write $x=-2+\bar x$. Substitution gives
+\[
+ -2\bar x-3\eps+\OO(\bar x^2,\eps\bar x)=0,
+ \qquad\bar x=-\frac32\eps+\OO(\eps^2).
+\]
+Hence
+\begin{equation}
+ x^{(1)}=-\frac\eps2+\OO(\eps^2),\qquad
+ x^{(2)}=-2-\frac32\eps+\OO(\eps^2).
+\end{equation}
+\edit{Correction (p.~9)}{The source gives $-2\eps/3$ for the second
+correction. Solving its own equation $-2\bar x-3\eps=0$ gives
+$-3\eps/2$. Both roots admit ordinary power-series expansions locally.}
+
+\subsection{A root lost in the limiting equation}
+Now consider
+\begin{equation}\label{eq:singquad}
+ \eps x^2+x-1=0.
+\end{equation}
+Setting $\eps=0$ gives only $x=1$. Write $x=1+\bar x$,
+then $\bar x\sim-\eps$. Putting $\bar x=-\eps+\widetilde x$ gives
+\[
+ \widetilde x=2\eps^2+\OO(\eps^3),\qquad
+ x_+=1-\eps+2\eps^2+\OO(\eps^3).
+\]
+To find the other root, compare possible dominant balances.
+Balancing $\eps x^2$ with $1$ suggests $x=\ord(\eps^{-1/2})$,
+but then $x$ is larger than the supposedly dominant terms, so this
+balance is inconsistent. Balancing $\eps x^2$ with $x$ instead gives
+$x\sim-\eps^{-1}$, with both terms much larger than $1$.
+Set $x=-\eps^{-1}+\bar x$. Then
+\[
+ -\bar x-1+\eps\bar x^2=0,\qquad
+ \bar x=-1+\OO(\eps).
+\]
+Rescaling $x=X/\eps$ gives the regular equation
+$X^2+X-\eps=0$, with $X\sim-1$ on this branch.
+\edit{Correction and reconstruction (pp.~9--10)}{One line in the
+source loses the minus sign in $x=-1/\eps+\bar x$.
+Using the sum of the two roots in \eqref{eq:singquad} completes the
+second expansion:
+$x_-=-\eps^{-1}-1+\eps-2\eps^2+\OO(\eps^3)$.}
+
+\section{Transcendental equations}
+\subsection{An exponentially small correction}
+\src{10}
+Solve $x+\tanh x=\lambda$ as $\lambda\to\infty$.
+First $x=\lambda+\bar x$ with $\bar x\sim-1$. Writing
+$x=\lambda-1+\widetilde x$ and using
+\[
+ \tanh x=\frac{1-e^{-2x}}{1+e^{-2x}}
+ =1-2e^{-2x}+\OO(e^{-4x})
+\]
+gives $\widetilde x\sim2e^{-2(\lambda-1)}$. Thus
+\[
+ x=\lambda-1+2e^{-2(\lambda-1)}
+ +\OO(e^{-4(\lambda-1)}).
+\]
+\edit{Reconstruction (p.~10)}{The explicit remainder follows by
+substitution and $\widetilde x=\OO(e^{-2(\lambda-1)})$.
+Approximating the argument of $\tanh$ is justified at this
+exponentially small scale, not merely by $\bar x\sim-1$.}
+
+\subsection{\texorpdfstring{Two positive roots: $x^2-\ln x+1=\lambda$}{Two positive roots: logarithmic equation}}
+\src{11--12}
+The source's sketch shows a curve tending to infinity at both ends
+of $x>0$, with a minimum between them. Indeed
+$f'(x)=2x-1/x$ has its only zero at $x=1/\sqrt2$;
+there are exactly two positive roots for sufficiently large $\lambda$.
+
+For the large root, write $x=\sqrt\lambda+\bar x$,
+$\bar x=o(\sqrt\lambda)$. Then
+\[
+ 2\sqrt\lambda\,\bar x+\bar x^2
+ -\frac12\ln\lambda
+ -\ln\left(1+\frac{\bar x}{\sqrt\lambda}\right)+1=0.
+\]
+The leading correction is $\bar x\sim\ln\lambda/(4\sqrt\lambda)$.
+Taking the constant residual into account gives
+\begin{equation}
+ x_{\mathrm{large}}=\sqrt\lambda
+ +\frac{\ln\lambda-2}{4\sqrt\lambda}
+ +\OO\left(\frac{(\ln\lambda)^2}{\lambda^{3/2}}\right).
+\end{equation}
+One may instead display the second term as two separate terms
+$\ln\lambda/(4\sqrt\lambda)-1/(2\sqrt\lambda)$.
+
+For the small root, $-\ln x\sim\lambda$ does not by itself imply
+$x\sim e^{-\lambda}$. Put $x=e^s$ to obtain
+\[
+ e^{2s}-s+1=\lambda.
+\]
+Let $s=-\lambda+\bar s$, so $\bar s\sim1$, and then
+$\bar s=1+\widetilde s$. The exact reduced equation is
+\[
+ \widetilde s=e^{2-2\lambda}e^{2\widetilde s}.
+\]
+Therefore, with $q=e^{2-2\lambda}$,
+\[
+ \widetilde s=q+\OO(q^2),\qquad
+ x_{\mathrm{small}}=e^{1-\lambda}[1+q+\OO(q^2)].
+\]
+\edit{Reconstruction (pp.~11--12)}{Remainders are supplied for both
+branches; the substitution into the logarithmic variable avoids
+unjustified exponentiation of an asymptotic equivalence.}
+
+\subsection{\texorpdfstring{Two roots: $xe^{1/x}=e^\lambda$}{Two roots: exponential equation}}
+\src{12}
+On $x>0$, the function decreases to its minimum $e$ at $x=1$ and
+then increases; hence there are two roots for $\lambda>1$.
+For the large root, put $E=e^\lambda$ and $x=E+x_1$.
+Expansion of $xe^{1/x}=x+1+1/(2x)+\OO(x^{-2})$ gives
+$x_1\sim-1$. Taking $x=E-1+x_2$ then gives
+\[
+ x_2\sim-\frac1{2E},\qquad
+ x_{\mathrm{large}}=e^\lambda-1-\frac12e^{-\lambda}
+ +\OO(e^{-2\lambda}).
+\]
+For the small root, take logarithms:
+\[
+ \ln x+\frac1x=\lambda,\qquad x\sim\frac1\lambda.
+\]
+Write $x=\lambda^{-1}+x_1$, $x_1=o(\lambda^{-1})$. Then
+\[
+ \ln x=-\ln\lambda+o(1),\quad
+ \frac1x=\lambda-\lambda^2x_1+\OO(\lambda^3x_1^2),
+\]
+so
+\[
+ x_1\sim-\frac{\ln\lambda}{\lambda^2},\qquad
+ x_{\mathrm{small}}=\frac1\lambda-
+ \frac{\ln\lambda}{\lambda^2}
+ +\OO\left(\frac{(\ln\lambda)^2}{\lambda^3}\right).
+\]
+\edit{Correction (p.~12)}{The source's final correction for the small
+root is positive, but $\ln(1/\lambda)=-\ln\lambda$ makes it negative.
+One intermediate large-root line likewise has the wrong sign for
+$x_1$; the source's final large-root answer has the correct minus sign.}
+
+\subsection{\texorpdfstring{Large roots of $x\tan x=1$}{Large roots of x tan x = 1}}
+\src{13}
+Since $\tan x=1/x$ is small for a large positive root, write
+$x=n\pi+h_n$, $0<h_n<\pi/2$. Tangent is $\pi$-periodic, so
+\[
+ (n\pi+h_n)\tan h_n=1.
+\]
+The dominant balance is $n\pi h_n\sim1$, giving
+\[
+ x_n=n\pi+\frac1{n\pi}+\OO(n^{-3})\qquad(n\to\infty).
+\]
+\edit{Correction and reconstruction (p.~13)}{The source assigns a
+minus sign to $\tan(n\pi+h)$ when $n$ is odd. In fact
+$\tan(n\pi+h)=\tan h$ for every integer $n$.
+The remainder is obtained from $\tan h=h+h^3/3+\OO(h^5)$;
+more precisely the next correction is $-4/[3(n\pi)^3]$.}
+
+\subsection{An exponentially narrow hyperbolic term}
+\src{13}
+Consider
+\[
+ x+1+\frac1{\cosh(x/\eps)}=0,\qquad\eps\to0^+.
+\]
+The source sketch compares the narrow positive peak of
+$1/\cosh(x/\eps)$ with the line $-x-1$.
+Any root satisfies $x<-1$; on this interval the sum on the left is
+strictly increasing, so there is exactly one root.
+Set $x=-1+h$, where $h<0$ is small. Then
+\[
+ \frac1{\cosh((-1+h)/\eps)}
+ \sim2e^{-1/\eps}e^{h/\eps},\qquad
+ h\sim-2e^{-1/\eps}.
+\]
+Thus
+\[
+ x=-1-2e^{-1/\eps}
+ +\OO\left(\frac{e^{-2/\eps}}\eps\right).
+\]
+\edit{Reconstruction (p.~13)}{The small correction satisfies
+$h/\eps\to0$, which justifies expanding $e^{h/\eps}$.
+Uniqueness and the remainder are added.}
+
+\section{Local analysis of ordinary differential equations}
+\src{14--16}
+Consider
+\begin{equation}\label{eq:ode}
+ y''+p(x)y'+q(x)y=0
+\end{equation}
+near $x=x_0$, using $x-x_0$ as the small variable.
+\subsection{Ordinary points and power series}
+An ordinary point is one at which $p$ and $q$ are analytic.
+At such a point solutions have convergent power-series representations
+locally. For $x_0=0$, seek $y=\sum_{n=0}^\infty a_nx^n$.
+\edit{Clarification (p.~14)}{The source defines a regular point using
+finite limits of $p,q$. Continuity suffices for a local existence theory,
+but analyticity is required for the power-series conclusion used here.}
+
+For $y''+y=0$, equating coefficients gives
+\[
+ (n+2)(n+1)a_{n+2}+a_n=0,\quad
+ a_{2k}=\frac{(-1)^ka_0}{(2k)!},\quad
+ a_{2k+1}=\frac{(-1)^ka_1}{(2k+1)!}.
+\]
+Consequently
+\[
+ y=a_0\sum_{k=0}^\infty\frac{(-1)^kx^{2k}}{(2k)!}
+ +a_1\sum_{k=0}^\infty\frac{(-1)^kx^{2k+1}}{(2k+1)!}
+ =a_0\cos x+a_1\sin x.
+\]
+
+\subsection{The Airy equation}
+\src{14--15}
+For $y''-xy=0$, power-series substitution gives
+\[
+ 2a_2=0,\qquad(n+3)(n+2)a_{n+3}=a_n\quad(n\ge0).
+\]
+Thus $a_2=a_5=a_8=\cdots=0$, and
+\begin{align*}
+ a_{3n}&=\frac{a_0}{(3n)(3n-1)(3n-3)(3n-4)\cdots3\cdot2}
+ =\frac{a_0\Gamma(2/3)}{3^{2n}n!\Gamma(n+2/3)},\\
+ a_{3n+1}&=\frac{a_1\Gamma(4/3)}{3^{2n}n!\Gamma(n+4/3)}.
+\end{align*}
+Define the normalized solutions
+\begin{align}
+ y_1(x)&=\Gamma(2/3)\sum_{n=0}^\infty
+ \frac{x^{3n}}{3^{2n}n!\Gamma(n+2/3)},\\
+ y_2(x)&=\Gamma(4/3)\sum_{n=0}^\infty
+ \frac{x^{3n+1}}{3^{2n}n!\Gamma(n+4/3)}.
+\end{align}
+Then $y=a_0y_1+a_1y_2$, with
+$y_1(0)=1,y_1'(0)=0,y_2(0)=0,y_2'(0)=1$.
+\edit{Ambiguous source normalization (p.~15)}{The handwritten underbraces
+under the two series leave unclear whether the Gamma prefactors are
+part of $y_1,y_2$. The source then writes
+$\operatorname{Ai}(x)=3^{-2/3}y_1(x)-3^{-4/3}y_2(x)$ and
+$\operatorname{Bi}(x)=3^{-1/6}y_1(x)+3^{-5/6}y_2(x)$.
+These are transcribed here for traceability, but should \emph{not}
+be used as standard Airy normalizations with our explicitly normalized
+$y_1,y_2$. The power-series solutions themselves are unambiguous.}
+\edit{Verified reconstruction}{Using the initial values in
+\href{https://dlmf.nist.gov/9.2.ii}{NIST DLMF, Section 9.2(ii)},
+the standard normalizations for our basis are}
+\begin{align*}
+ \operatorname{Ai}(x)&=\frac{y_1(x)}{3^{2/3}\Gamma(2/3)}
+ -\frac{y_2(x)}{3^{1/3}\Gamma(1/3)},\\
+ \operatorname{Bi}(x)&=\frac{y_1(x)}{3^{1/6}\Gamma(2/3)}
+ +\frac{3^{1/6}y_2(x)}{\Gamma(1/3)}.
+\end{align*}
+
+\subsection{Regular singular points and Euler equations}
+\src{15--16}
+At a regular singular point, $(x-x_0)p(x)$ and
+$(x-x_0)^2q(x)$ extend analytically to $x_0$.
+For $4x^2y''+y=0$ at zero, an ordinary power series would require
+\[
+ [4n(n-1)+1]a_n=(2n-1)^2a_n=0.
+\]
+For integer $n\ge0$ this forces every coefficient to vanish, so
+an ordinary Taylor series cannot represent a nonzero solution.
+
+For the general Euler equation
+\[
+ x^2y''+\alpha xy'+\beta y=0,\qquad x>0,
+\]
+try $y=x^r$. The indicial equation is
+\[
+ r(r-1)+\alpha r+\beta=0.
+\]
+Distinct real roots give $x^{r_1},x^{r_2}$. For a repeated root $r$,
+\[
+ \lim_{r_2\to r}\frac{x^{r_2}-x^r}{r_2-r}=x^r\ln x,
+\]
+and the fundamental set is $x^r,x^r\ln x$.
+In particular $4x^2y''+y=0$ has solutions
+$x^{1/2}$ and $x^{1/2}\ln x$.
+\edit{Clarification (pp.~15--16)}{Finite weighted limits alone are
+weaker than the usual analytic hypotheses for Frobenius theory.
+The logarithmic example is valid on $x>0$.}
+
+\subsection{Frobenius series}
+For a regular singular point at zero, seek
+\[
+ y=x^r\sum_{n=0}^\infty a_nx^n,\qquad a_0\ne0.
+\]
+Consider $2x^2y''-xy'+(1+x)y=0$. The indicial equation is
+\[
+ 2r(r-1)-r+1=(2r-1)(r-1)=0,
+ \qquad r=1,\tfrac12.
+\]
+For $n\ge1$,
+\[
+ [2(n+r)-1][n+r-1]a_n+a_{n-1}=0.
+\]
+For $r=1$,
+\[
+ a_n=-\frac{a_{n-1}}{n(2n+1)}
+ =\frac{(-1)^na_0\,2^n}{(2n+1)!},\qquad
+ y_{(1)}=x\sum_{n=0}^\infty\frac{(-1)^n2^nx^n}{(2n+1)!}.
+\]
+\edit{Reconstruction (p.~16)}{The notes say to find the other branch
+but do not work it out. For $r=1/2$,
+$a_n=-a_{n-1}/[n(2n-1)]$, giving
+$y_{(2)}=x^{1/2}\sum_{n=0}^\infty(-1)^n2^nx^n/(2n)!$.
+On $x>0$ these are respectively
+$\sqrt{x/2}\sin\sqrt{2x}$ and $\sqrt{x}\cos\sqrt{2x}$;
+arbitrary constants multiply the two branches.}
+
+\section{An irregular singular point: Bessel behaviour at infinity}
+\src{16--18}
+Consider the order-zero Bessel equation
+\begin{equation}\label{eq:bessel}
+ y''+\frac1xy'+y=0.
+\end{equation}
+Zero is regular singular, while infinity is irregular singular
+(after changing variable to $t=1/x$). Dropping $y'/x$ suggests
+oscillations $e^{\pm ix}$, but misses their algebraic amplitude.
+\edit{Clarification (pp.~16--17)}{The source's warning that
+$xe^{\pm ix}$ also has the same leading derivative balance is
+understood as a formal balance, not as an exact solution of
+$y''+y=0$ or of \eqref{eq:bessel}.}
+For an individual complex oscillatory branch, put $y=e^{S(x)}$.
+Then
+\[
+ S''+(S')^2+\frac{S'}x+1=0.
+\]
+Let $S'=\sigma i+T$, $\sigma\in\{1,-1\}$. It follows that
+\[
+ T'+2\sigma iT+T^2+\frac{\sigma i}x+\frac Tx=0.
+\]
+Assuming $T'=o(T)$ and $T=o(1)$ gives the consistent balance
+$T\sim-1/(2x)$. Iterating gives
+\[
+ T=-\frac1{2x}+\OO(x^{-2}),\qquad
+ S=\sigma ix-\frac12\ln x+C_\sigma+\OO(x^{-1}),
+\]
+and therefore the two oscillatory modes have the form
+\[
+ y_\sigma=C_\sigma x^{-1/2}e^{\sigma ix}
+ [1+\OO(x^{-1})].
+\]
+\edit{Clarification (p.~17)}{This is a formal asymptotic derivation;
+the assumptions on $T$ are self-consistent, but are not by themselves
+a full existence proof. A general real solution is a combination of
+the two modes and has zeros, so a global logarithm $S$ need not exist.}
+
+\subsection{Near zero and the standard Bessel solutions}
+Near zero the regular solution and an independent logarithmic solution
+can be normalized as
+\begin{align*}
+ J_0(x)&=1-\frac{x^2}4+\OO(x^4),\\
+ L_0(x)&=\ln x-\frac{x^2}4\ln x+\frac{x^2}4
+ +\OO\bigl(x^4|\ln x|\bigr)\qquad(x\to0^+).
+\end{align*}
+The standard second-kind normalization is
+\[
+ Y_0(x)=\frac2\pi\bigl[L_0(x)+(\gamma-\ln2)J_0(x)\bigr].
+\]
+The large-$x$ leading oscillations are conventionally written
+\begin{align*}
+ J_0(x)&=\sqrt{\frac2{\pi x}}
+ \left[\cos\left(x-\frac\pi4\right)+\OO(x^{-1})\right],\\
+ Y_0(x)&=\sqrt{\frac2{\pi x}}
+ \left[\sin\left(x-\frac\pi4\right)+\OO(x^{-1})\right].
+\end{align*}
+\edit{Correction (p.~18)}{The source gives cosine for both $J_0$
+and $Y_0$; the second phase is sine. Additive error notation is used
+because ratio equivalence is unsuitable at zeros of the oscillation.
+The handwritten instruction assigning constants to the logarithmic
+solution is ambiguous: $Y_0$ requires adding a multiple of $J_0$ as
+well as scaling $L_0$. The phase and normalization constants are
+stated here, as in the source, without deriving their global matching.
+The normalizations were checked against
+\href{https://dlmf.nist.gov/10.8}{NIST DLMF, Section 10.8}, and the
+phases against \href{https://dlmf.nist.gov/10.17}{Section 10.17}.}
+
+\section{Solvability, resonance and eigenvalue perturbation}
+\subsection{Inner products and adjoints}
+\src{18--19}
+For $x,y\in\mathbb C^n$, use the convention
+\[
+ \langle x,y\rangle=x^T\overline y,
+\]
+linear in the first argument and conjugate-linear in the second.
+Then $\langle x,x\rangle\ge0$, with equality precisely when $x=0$.
+The adjoint satisfies
+\[
+ \langle Ax,y\rangle=\langle x,A^*y\rangle.
+\]
+It is unique: if $W_1,W_2$ both satisfy this identity, then
+$\langle x,(W_1-W_2)y\rangle=0$ for all $x,y$. Taking
+$x=(W_1-W_2)y$ proves $W_1=W_2$.
+Direct calculation gives $A^*=\overline A^{\,T}$.
+If $A=A^*$, it is self-adjoint and all its eigenvalues are real:
+if $Av=\lambda v$ and $v\ne0$, then
+\[
+ \lambda\langle v,v\rangle
+ =\langle Av,v\rangle
+ =\langle v,Av\rangle
+ =\overline\lambda\langle v,v\rangle.
+\]
+
+\subsection{The Fredholm alternative in finite dimensions}
+An invertible (regular) matrix has only the trivial null vector and
+$Ax=b$ has a unique solution for every $b$. If $A$ is singular,
+the system is either inconsistent or has infinitely many solutions.
+\edit{Correction (p.~19)}{The source's definition of regularity must
+read ``only the trivial solution'' of $Ax=0$; the zero vector is
+always a solution, even for a singular matrix.}
+
+If $Ax=b$ and $v\in\Null(A^*)$, then
+\[
+ \langle b,v\rangle=\langle Ax,v\rangle
+ =\langle x,A^*v\rangle=0.
+\]
+In fact this necessary condition is sufficient:
+\begin{equation}\label{eq:fredholm}
+ Ax=b\text{ is solvable}\quad\Longleftrightarrow\quad
+ \langle b,v\rangle=0\quad\text{for all }v\in\Null(A^*).
+\end{equation}
+If $v^{(1)},\ldots,v^{(m)}$ form a basis of $\Null(A^*)$, it suffices
+to test these $m$ vectors. Since $\rank A=\rank A^*$ and
+rank--nullity holds, $\dim\Null A=\dim\Null A^*$ for square matrices.
+\edit{Reconstruction (p.~19)}{For sufficiency, the identity
+$(\operatorname{Ran} A)^\perp=\Null(A^*)$ implies
+$\operatorname{Ran} A=\Null(A^*)^\perp$ in finite dimensions.}
+
+\subsection{A regular matrix perturbation}
+\src{19}
+Consider
+\[
+ (A+\eps B)x=b.
+\]
+If $A$ is invertible, substitute $x\sim x_0+\eps x_1+\cdots$:
+\[
+ Ax_0=b,\quad Ax_1+Bx_0=0,\qquad
+ x_0=A^{-1}b,\quad x_1=-A^{-1}BA^{-1}b.
+\]
+This expansion generally fails when $A$ is singular.
+
+\subsection{Simple resonance}
+\src{19--20}
+Assume $\Null A=\spanof\{u\}$ and $\Null A^*=\spanof\{v\}$.
+Try a Laurent expansion
+\[
+ x\sim\eps^{-1}x_{-1}+x_0+\eps x_1+\cdots.
+\]
+Successive orders give
+\begin{align*}
+ \eps^{-1}:&\quad Ax_{-1}=0,\quad x_{-1}=au,\\
+ 1:&\quad Ax_0=b-aBu.
+\end{align*}
+By \eqref{eq:fredholm},
+\[
+ \langle b,v\rangle-a\langle Bu,v\rangle=0.
+\]
+If $\langle Bu,v\rangle\ne0$, then
+\begin{equation}
+ a=\frac{\langle b,v\rangle}{\langle Bu,v\rangle},\qquad
+ x_{-1}=\frac{\langle b,v\rangle}{\langle Bu,v\rangle}u.
+\end{equation}
+Let $p$ be any particular solution of $Ap=b-aBu$. Then
+$x_0=p+a'u$. The next equation $Ax_1=-Bx_0$ fixes
+\[
+ a'=-\frac{\langle Bp,v\rangle}{\langle Bu,v\rangle}.
+\]
+If $\langle b,v\rangle=0$, the leading pole coefficient vanishes
+and the unperturbed equation is solvable.
+
+\subsection{Super-resonance}
+\src{20}
+If $\langle Bu,v\rangle=0$, the preceding quotient is unavailable.
+Try instead
+\[
+ x\sim\eps^{-2}x_{-2}+\eps^{-1}x_{-1}+x_0+\cdots.
+\]
+At the first two orders,
+\[
+ x_{-2}=au,\qquad Ax_{-1}=-aBu.
+\]
+Since $Bu$ is orthogonal to $\Null(A^*)$, choose a particular
+solution $p$ of $Ap=-Bu$. Then $x_{-1}=ap+a'u$. At order one,
+\[
+ Ax_0=b-B(ap+a'u).
+\]
+The solvability condition is
+\[
+ \langle b,v\rangle-a\langle Bp,v\rangle=0,
+ \qquad a=\frac{\langle b,v\rangle}{\langle Bp,v\rangle}
+ \quad\text{if }\langle Bp,v\rangle\ne0.
+\]
+\edit{Clarification (p.~20)}{The definition $Ap=-Bu$, implicit in the
+handwritten change of notation, is made explicit. A second-order pole
+is conditional on the new nonzero denominator; if it also vanishes,
+further analysis is required.}
+
+\subsection{Eigenvalue perturbation}
+\src{20--21}
+Seek nonzero solutions of
+\[
+ (A+\eps B)x=\lambda x.
+\]
+Let $a$ be an algebraically simple eigenvalue of $A$, and write
+\[
+ A_a=A-aI,\quad\Null A_a=\spanof\{u\},\quad
+ \Null A_a^*=\spanof\{v\}.
+\]
+Expand
+\[
+ \lambda=a+\eps\lambda_1+\eps^2\lambda_2+\cdots,
+ \qquad x=x_0+\eps x_1+\cdots.
+\]
+At leading order, $Ax_0=ax_0$, so $x_0=ku$, $k\ne0$.
+At the next order,
+\[
+ A_ax_1=-Bx_0+\lambda_1x_0=-kBu+k\lambda_1u.
+\]
+The Fredholm condition yields
+\begin{equation}
+ \boxed{\lambda_1=\frac{\langle Bu,v\rangle}{\langle u,v\rangle}}.
+\end{equation}
+It is independent of the normalization $k$. For self-adjoint $A$,
+$a$ is real and one may take $v=u$, so
+\[
+ \lambda_1=\frac{\langle Bu,u\rangle}{\langle u,u\rangle}.
+\]
+\edit{Clarification (p.~21)}{A one-dimensional eigenspace alone does
+not guarantee a simple eigenvalue. For an algebraically simple
+eigenvalue, $\langle u,v\rangle\ne0$. If this pairing vanishes,
+the eigenvalue is defective and the assumed ordinary power series
+may fail. The source notes this possible zero denominator but does
+not resolve it. Eigenvector normalization is still needed to make
+$x_1$ unique.}
+
+\appendix
+\section{Editorial register and remaining uncertainties}
+All 21 source pages were read visually. The following list records
+substantive departures from the handwriting; minor spelling,
+punctuation, dummy-index changes, and routine alignment are not listed.
+\begingroup\small
+\setlength{\parskip}{2pt}
+\begin{enumerate}
+\setlength{\itemsep}{2pt}
+ \item Page 1: corrected the logarithmic inequality's sign and
+ qualified the strict harmonic-number bounds at $n=1$.
+ \item Page 2: corrected first-order exponential Taylor signs and
+ supplied a justification for the limiting integral for $\gamma$.
+ \item Pages 3--4: supplied the binomial series convergence domain
+ and the exclusion of Gamma poles from finite-valued continuation.
+ \item Page 5: preserved the course's $\ord$ convention; clarified
+ one-sided logarithmic limits and the unusual $x^2-1$ example.
+ \item Page 6: replaced the false $x\sin x=\ord(x)$ claim by
+ $x\sin x=\OO(x)$ in the differentiation warning.
+ \item Page 7: distinguished finite-expansion remainder conditions;
+ specified $0^+$ for the flat-function example.
+ \item Page 8: corrected the generic binomial remainder and the
+ final fractional-power remainder exponent.
+ \item Page 9: changed the root correction $-2\eps/3$ to
+ $-3\eps/2$ and restored a missing minus sign in the large-root ansatz.
+ \item Pages 10--13: supplied remainders and consistency arguments
+ in the transcendental examples. These are deductions, not literal
+ transcriptions of additional handwritten terms.
+ \item Page 12: corrected the small-root logarithmic sign and a
+ conflicting intermediate sign in the large-root calculation.
+ \item Page 13: corrected tangent periodicity for odd $n$; completed
+ the large-root error estimate and the hyperbolic-root uniqueness check.
+ \item Pages 14--16: stated the analytic hypotheses for power-series
+ and Frobenius theory; completed the second Frobenius branch.
+ \item Page 15: the Airy $y_1,y_2$ underbrace normalization remains
+ ambiguous in the source. Its named-function combinations are retained
+ inside a warning; verified standard normalizations are supplied
+ separately for the explicitly defined basis.
+ \item Pages 16--17: distinguished formal dominant balance from
+ exact solutions and from a proof of asymptotic existence.
+ \item Page 18: corrected the $Y_0$ phase, expressed its near-zero
+ normalization as a linear combination, and used additive errors
+ for oscillatory asymptotic formulas.
+ \item Page 19: corrected the definition of matrix regularity and
+ supplied the range--nullspace proof of sufficiency.
+ \item Page 20: made the super-resonance particular solution and
+ nondegeneracy requirement explicit.
+ \item Page 21: distinguished algebraic simplicity from a
+ one-dimensional eigenspace and stated the normalization limitation.
+\end{enumerate}
+The three qualitative source sketches (two-root logarithmic equation,
+two-root exponential equation, and narrow hyperbolic peak) are
+described in the corresponding text rather than reproduced as images.
+No mathematical content is inferred from their drawing scale.
+\endgroup
+\end{document}
