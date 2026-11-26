@@ -34,6 +34,9 @@
 !.env.example
 /.aws/
 
+# Superseded local handwritten scan
+/notes from guy 18_11_26.pdf
+
 # Operating-system metadata
 Thumbs.db
 Desktop.ini

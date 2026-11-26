@@ -1,5 +1,5 @@
 % Compile: pdflatex guy_notes.tex (twice for the contents).
-% Source: notes from guy 18_11_26.pdf, all 21 pages.
+% Source: guy_notes_26_11_26.pdf, all 33 pages.
 \documentclass[11pt,a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -26,12 +26,12 @@
 \numberwithin{equation}{section}
 \title{Asymptotic Methods\\\large Guy's Handwritten Notes: Edited LaTeX Transcription}
 \author{Source notes by Guy}
-\date{Source file dated 18 November 2026}
+\date{Source file dated 26 November 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
-An edited mathematical transcription of all 21 pages of
-\texttt{notes from guy 18\_11\_26.pdf}. The order of topics and worked
+An edited mathematical transcription of all 33 pages of
+\texttt{guy\_notes\_26\_11\_26.pdf}. The order of topics and worked
 examples follows the source. English and layout have been cleaned up;
 repeated algebra has occasionally been combined. Blue editorial notes
 identify substantive corrections, deductions, added hypotheses, and
@@ -884,9 +884,269 @@ may fail. The source notes this possible zero denominator but does
 not resolve it. Eigenvector normalization is still needed to make
 $x_1$ unique.}
 
+\section{Solvability for differential boundary-value problems}
+\subsection{A nonlinear resonant problem}
+\src{22--23}
+Consider
+\[
+ y''+y+\eps(y')^2=1,\qquad y(0)=y(\pi)=0,\qquad \eps\to0^+.
+\]
+A regular expansion would give $y_0=A\cos x+B\sin x+1$.
+The endpoint conditions require both $A=-1$ and $A=1$.
+The homogeneous Dirichlet problem for $L=D^2+1$ has the free mode
+$\sin x$. A multiple of this mode of size $\eps^{-1/2}$ makes the
+quadratic term order one. Write formally
+\[
+ y=\eps^{-1/2}u+y_0+\cdots,\qquad
+ Lu=0,\quad u(0)=u(\pi)=0,\quad u=a\sin x.
+\]
+The next equation is $Ly_0=1-a^2\cos^2 x$ with zero endpoint values.
+With $\langle\phi,\psi\rangle=\int_0^\pi\phi\overline\psi\,dx$,
+two integrations by parts give
+\[
+ \langle L\phi,\psi\rangle-\langle\phi,L\psi\rangle
+ =[\phi'\overline\psi-\phi\overline{\psi'}]_0^\pi .
+\]
+Taking $\phi=y_0$ and $\psi=\sin x$ makes both the boundary term
+and $L\psi$ vanish. Hence
+\[
+ 0=\int_0^\pi(1-a^2\cos^2 x)\sin x\,dx
+   =2-\tfrac23a^2,\qquad a=\pm\sqrt3 .
+\]
+The two formal leading profiles are $\pm\sqrt{3/\eps}\,\sin x$.
+
+\subsection{Adjoint differential expressions and boundary conditions}
+\src{23--24}
+For a regular differential expression $L$ of order $N$ on $[a,b]$,
+integration by parts gives Green's identity
+\[
+ \langle L\phi,\psi\rangle-\langle\phi,L^*\psi\rangle=J(\phi,\psi).
+\]
+Here $J$ depends on endpoint derivatives through order $N-1$ and is
+linear in $\phi$ and conjugate-linear in $\psi$. Suppose $B\phi=0$
+imposes $N$ independent linear boundary conditions. The adjoint boundary
+conditions $B^*\psi=0$ select exactly those $\psi$ for which
+$J(\phi,\psi)=0$ for every $\phi$ satisfying $B\phi=0$.
+
+\paragraph{Dirichlet and periodic examples.}
+For $L=D^2+1$, the boundary form is
+$[\phi'\overline\psi-\phi\overline{\psi'}]_a^b$.
+With Dirichlet values at $0,\pi$, the endpoint derivatives of $\phi$
+are free, so $\psi(0)=\psi(\pi)=0$ as well. Both kernels are spanned
+by $\sin x$. For periodic values and first derivatives on $[a,b]$,
+the form reduces to
+\[
+ \phi'(a)\overline{\bigl(\psi(b)-\psi(a)\bigr)}
+ -\phi(a)\overline{\bigl(\psi'(b)-\psi'(a)\bigr)} .
+\]
+The adjoint conditions are again periodic. When $b-a=2\pi k$ for a
+positive integer $k$, both $\sin x$ and $\cos x$ satisfy them.
+\edit{Interpretation (pp.~23--24)}{Examples I and II appear to print
+$y''+y'$ on p.~23. Their boundary form and the sine and cosine
+solutions on p.~24 agree with $y''+y$. The Dirichlet interval
+$[0,\pi]$ is inferred from the preceding example and the stated kernel.}
+
+\paragraph{Neumann example.}
+Now $L=D^2+D$ on $[0,1]$, with $\phi'(0)=\phi'(1)=0$. Integration
+by parts gives $L^*=D^2-D$ and
+\[
+ J(\phi,\psi)=
+ [\phi'\overline\psi+\phi(\overline\psi-\overline{\psi'})]_0^1 .
+\]
+The endpoint values of $\phi$ are free, so $\psi'=\psi$ at both ends.
+Constants span the original kernel. The general adjoint solution is
+$Ce^x+D_0$; the boundary conditions impose $D_0=0$. Thus $e^x$
+spans the adjoint kernel.
+
+\subsection{Forcing and nonhomogeneous boundary data}
+\src{24--26}
+For $Ly=f$, $By=g$, choose any sufficiently smooth $\widetilde y$
+with $B\widetilde y=g$. If $L^*v=0$ and $B^*v=0$, then
+$J(y-\widetilde y,v)=0$ because $y-\widetilde y$ has homogeneous
+boundary data. Consequently the compatibility condition is
+\[
+ \boxed{\langle f,v\rangle=J(\widetilde y,v)
+ \quad\text{for every }v\text{ in the homogeneous adjoint kernel}.}
+\]
+The right-hand side is independent of the chosen lift. Green's identity
+proves necessity. For a regular linear ODE boundary-value problem
+on a finite interval, the Fredholm alternative also gives sufficiency.
+
+For example, consider
+\[
+ y''+y'+\eps y=x,\qquad y'(0)=1,\quad y'(1)=0 .
+\]
+At $\eps=0$, $y'=x-1+Ce^{-x}$ would require $C=2$ at the left
+endpoint and $C=0$ at the right. Try $y=\eps^{-1}a+y_0+\cdots$,
+where the constant $a$ lies in the homogeneous Neumann kernel.
+Then $Ly_0=x-a$, $y_0'(0)=1$ and $y_0'(1)=0$.
+For $v=e^x$ the boundary form reduces to $[e^xy_0']_0^1=-1$, giving
+\[
+ \int_0^1(x-a)e^x\,dx=1-a(e-1)=-1,\qquad
+ a=\frac{2}{e-1}.
+\]
+\edit{Correction (pp.~25--26)}{The first boundary datum is read as a
+derivative, in agreement with the subsequent equations. The weight
+in the integral is $e^x$ throughout, and the constant $a$ multiplies
+the second integral.}
+
+\section{Asymptotic expansions of integrals}
+\subsection{Two expansions near the origin}
+\src{27}
+On $0\le t\le1$, the power series for $\sin(xt)/t$, extended by
+continuity at $t=0$, converges uniformly for each fixed $x$. Thus
+\[
+ \int_0^1\frac{\sin(xt)}{t}\,dt
+ =\sum_{n=0}^\infty\frac{(-1)^n x^{2n+1}}{(2n+1)!(2n+1)}
+ =x-\frac{x^3}{18}+\OO(x^5).
+\]
+For $I(x)=\int_x^\infty e^{-t^4}\,dt$, the substitution $u=t^4$
+gives $I(0)=\tfrac14\Gamma(\tfrac14)=\Gamma(\tfrac54)$.
+Subtracting the integral from $0$ to $x$, where $e^{-t^4}=1+\OO(t^4)$,
+yields $I(x)=\Gamma(\tfrac54)-x+\OO(x^5)$ as $x\to0$.
+
+\subsection{The complementary error function at infinity}
+\src{27--28}
+Define $\operatorname{erf}(x)=\tfrac{2}{\sqrt\pi}\int_0^x e^{-t^2}dt$
+and $\operatorname{erfc}(x)=1-\operatorname{erf}(x)$. Set $t=x+u$ in
+the Gaussian tail. Then
+\[
+ \operatorname{erfc}(x)=\frac{2e^{-x^2}}{\sqrt\pi}
+     \int_0^\infty e^{-2xu}e^{-u^2}\,du .
+\]
+The factor $e^{-2xu}$ selects $u$ of order $1/x$. Differentiating
+$\int_0^\infty e^{-su}\,du=1/s$ gives the moments
+$\int_0^\infty u^k e^{-su}\,du=k!/s^{k+1}$ for $s>0$.
+Using $e^{-u^2}=1-u^2+\OO(u^4)$ therefore gives
+\[
+ \operatorname{erfc}(x)=\frac{e^{-x^2}}{\sqrt\pi}
+ \left(\frac1x-\frac{1}{2x^3}+\OO(x^{-5})\right).
+\]
+More generally, for fixed $N\ge1$ as $x\to+\infty$,
+\[
+ \operatorname{erfc}(x)=\frac{e^{-x^2}}{\sqrt\pi\,x}
+ \left[\sum_{n=0}^{N-1}\frac{(-1)^n(2n)!}{n!\,(4x^2)^n}
+       +\OO(x^{-2N})\right].
+\]
+At fixed $x>0$ the ratio of successive term magnitudes is
+$(2n+1)/(2x^2)$, so the infinite series diverges.
+\edit{Correction and reconstruction (pp.~27--28)}{Integrating the
+quadratic term gives the coefficient $-1/2$ of $x^{-3}$ inside the
+first parentheses. The moment formula also restores the prefactor and
+powers in the general term. Taylor's theorem bounds the error in
+the degree-$(N-1)$ polynomial for $e^{-s}$ by $s^N/N!$ for $s\ge0$.
+Taking $s=u^2$ and integrating this bound proves the finite-order
+estimate even though the integration interval is unbounded.}
+
+\subsection{The exponential integral and upper incomplete gamma function}
+\src{28--30}
+For $x>0$, let $E_1(x)=\int_x^\infty e^{-t}\,dt/t$.
+Integration by parts gives
+\[
+ E_1(x)=-e^{-x}\ln x+\int_x^\infty e^{-t}\ln t\,dt .
+\]
+Since $\int_0^\infty e^{-t}\ln t\,dt=-\gamma$, it follows that
+$E_1(x)+\ln x\to-\gamma$ as $x\to0^+$. Alternatively, splitting
+the defining integral at $1$ identifies the same constant as
+\[
+ \int_1^\infty\frac{e^{-t}}t\,dt+\int_0^1\frac{e^{-t}-1}{t}\,dt .
+\]
+Now $E_1'(x)=-e^{-x}/x=-1/x+1-x/2+\OO(x^2)$, so
+\[
+ E_1(x)=-\ln x-\gamma+x-\tfrac14x^2+\OO(x^3).
+\]
+\edit{Clarification (pp.~28--29)}{The discarded integral
+$\int_0^x e^{-t}\ln t\,dt$ is of order $x|\ln x|$. Its logarithmic
+contribution cancels the one from $-e^{-x}\ln x$. Integrating the
+derivative gives the displayed remainder without assuming an
+$\OO(x)$ bound for the discarded integral alone.}
+
+Let $\Gamma(a,x)=\int_x^\infty t^{a-1}e^{-t}\,dt$ for real $a$.
+For $a>0$ its limit at zero is $\Gamma(a)$, and for $a=0$ it equals
+$E_1(x)$. For negative $a$, subtract enough Taylor terms of $e^{-t}$
+to leave an integrable remainder at the origin.
+\begin{align*}
+ -1<a<0:\quad \Gamma(a,x)
+ &= -\frac{x^a}{a}
+   +\int_0^\infty t^{a-1}(e^{-t}-1)\,dt+\OO(x^{a+1}),\\
+ a=-1:\quad \Gamma(-1,x)
+ &=\frac{e^{-x}}x-E_1(x)
+   =\frac1x+\ln x+\gamma-1+\OO(x),\\
+ -2<a<-1:\quad \Gamma(a,x)
+ &= -\frac{x^a}{a}+\frac{x^{a+1}}{a+1}\\
+ &\quad+\int_0^\infty t^{a-1}(e^{-t}-1+t)\,dt+\OO(x^{a+2}).
+\end{align*}
+\edit{Reconstruction (pp.~29--30)}{In the two open ranges, the errors
+come from integrating the Taylor remainders on $[0,x]$. The constant
+integrals also converge at infinity in the indicated ranges.}
+
+\subsection{A cutoff for a growing exponential}
+\src{31}
+For $I(x)=\int_0^x e^{t^2}\,dt$ the tail to infinity diverges, and
+direct integration by parts introduces $1/(2t)$ at zero. Fix
+$a>0$ and integrate by parts on $[a,x]$ only. This gives
+\[
+ I(x)=\int_0^a e^{t^2}\,dt-\frac{e^{a^2}}{2a}
+       +\frac{e^{x^2}}{2x}+\frac12\int_a^x\frac{e^{t^2}}{t^2}\,dt .
+\]
+Divide the last integral by $e^{x^2}/x$. By l'H\^opital's rule its
+limiting ratio equals $\lim_{x\to\infty}1/(2x^2-1)=0$.
+The fixed terms are negligible as well, so $I(x)\sim e^{x^2}/(2x)$.
+
+\subsection{Local and global contributions: subtraction and splitting}
+\src{31--33}
+Consider $I(\eps)=\int_0^1(x+\eps)^{-1/2}\,dx$. At fixed $x>0$,
+\[
+ (x+\eps)^{-1/2}=x^{-1/2}-\tfrac12\eps x^{-3/2}
+                  +\OO(\eps^2 x^{-5/2}) .
+\]
+The first term integrates to $2$. The second has a divergent integral
+at zero because the expansion requires $\eps/x\ll1$. In a region of
+width $\eps$ near zero the original integrand is of order
+$\eps^{-1/2}$, giving a contribution of order $\sqrt\eps$.
+
+\paragraph{Subtraction.}
+Subtract $x^{-1/2}$ inside the integral and put $x=\eps u$. Then
+\[
+ I(\eps)-2=\sqrt\eps\int_0^{1/\eps}h(u)\,du,\qquad
+ h(u)=(1+u)^{-1/2}-u^{-1/2}.
+\]
+The singularity at zero is integrable. At infinity,
+$h(u)=-\tfrac12u^{-3/2}+\OO(u^{-5/2})$, and
+$\int_0^\infty h(u)\,du=[2\sqrt{1+u}-2\sqrt u]_0^\infty=-2$.
+Extending the upper limit therefore gives
+$I(\eps)=2-2\sqrt\eps+\OO(\eps)$.
+
+\paragraph{Splitting.}
+Choose an intermediate cutoff $\eps\ll\lambda\ll1$. On $[0,\lambda]$,
+put $x=\eps u$, add and subtract $u^{-1/2}$ and set $M=\lambda/\eps$.
+The integral of $h$ up to $M$ is
+$-2-\int_M^\infty h(u)\,du=-2+M^{-1/2}+\OO(M^{-3/2})$.
+Adding back $\int_0^M u^{-1/2}du=2\sqrt M$ gives the local expansion.
+On $[\lambda,1]$ the outer Taylor expansion is uniform. The results are
+\begin{align*}
+ I_{\rm local}
+ &=2\sqrt\lambda-2\sqrt\eps+\frac{\eps}{\sqrt\lambda}
+   +\OO(\eps^2\lambda^{-3/2}),\\
+ I_{\rm global}
+ &=2(1-\sqrt\lambda)+\eps(1-\lambda^{-1/2})
+   +\OO(\eps^2\lambda^{-3/2}).
+\end{align*}
+After addition the displayed cutoff terms cancel. Taking
+$\eps^{2/3}\ll\lambda\ll1$ makes the error $o(\eps)$.
+For $\lambda=\eps^\alpha$, $0<\alpha<2/3$, it is bounded by
+$\OO(\eps^{2-3\alpha/2})$. This gives the three terms
+$2-2\sqrt\eps+\eps$.
+\edit{Correction and check (pp.~32--33)}{The rescaling contributes
+$\sqrt\eps$, and the tail integrand has coefficient $-1/2$.
+The handwritten sum drops the surviving $+\eps$. The exact integral
+$2\sqrt{1+\eps}-2\sqrt\eps$ verifies all three terms and confirms
+the source's conjectured $\OO(\eps^2)$ error, with next term
+$-\eps^2/4$.}
+
 \appendix
 \section{Editorial register and remaining uncertainties}
-All 21 source pages were read visually. The following list records
+All 33 source pages were read visually across the two editions. The following list records
 substantive departures from the handwriting; minor spelling,
 punctuation, dummy-index changes, and routine alignment are not listed.
 \begingroup\small
@@ -933,6 +1193,13 @@ punctuation, dummy-index changes, and routine alignment are not listed.
  nondegeneracy requirement explicit.
  \item Page 21: distinguished algebraic simplicity from a
  one-dimensional eigenspace and stated the normalization limitation.
+ \item Pages 22--26: inferred the intended operator in the first two
+ adjoint examples from their boundary forms and kernels; checked the
+ derivative boundary data and the exponential weight in the forced example.
+ \item Pages 27--30: corrected the Gaussian tail coefficients and
+ justified the remainders for the Gaussian, exponential and gamma integrals.
+ \item Pages 31--33: checked the cutoff proof, corrected the local tail
+ coefficient and retained the order-$\eps$ term in the combined expansion.
 \end{enumerate}
 The three qualitative source sketches (two-root logarithmic equation,
 two-root exponential equation, and narrow hyperbolic peak) are
